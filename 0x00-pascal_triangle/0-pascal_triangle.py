@@ -3,7 +3,8 @@
 
 
 def pascal_triangle(n):
-    """ pascal's triangle function """ 
+    """ pascal's triangle function """
+
     grand_list = []
 
     if (n <= 0):
