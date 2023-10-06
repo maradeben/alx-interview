@@ -3,13 +3,18 @@
 
 
 def pascal_triangle(n):
-    """ pascal's triangle function """
-
-    grand_list = []
-
-    if (n <= 0):
-        return (grand_list)
-
-    for i in range(n):
-        grand_list.append(str(11**i))
-    return (grand_list)
+    triangle = []
+    if n <= 0:
+        return (triangle)
+    for i in range(1, n + 1):
+        if i == 1:
+            triangle.append([1])
+        else:
+            new_row = [1]
+            # -1 to go to prev row, -1 to account for zero index
+            prev_row = triangle[i-2]
+            new_row.extend(prev_row[j] + prev_row[j+1]
+                           for j in range(len(prev_row)-1))
+            new_row.append(1)
+            triangle.append(new_row)
+    return (triangle)
