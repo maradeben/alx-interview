@@ -4,6 +4,9 @@
 
 def minOperations(n):
     """ find minimum number of operations needed to have n H """
+    if type(n) is not int:
+        return 0
+
     if n == 1:
         return 0
 
