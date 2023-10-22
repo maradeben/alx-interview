@@ -34,7 +34,6 @@ try:
             if line_count > 9:
                 do_print(total_size, status_codes)
                 line_count = 0
-
-
+    do_print(total_size, status_codes)
 except KeyboardInterrupt:
     do_print(total_size, status_codes)
