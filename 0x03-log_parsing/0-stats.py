@@ -31,7 +31,7 @@ try:
                 status_codes[int(status)] += 1
             line_count += 1
 
-            if line_count > 10:
+            if line_count > 9:
                 do_print(total_size, status_codes)
                 line_count = 0
 
