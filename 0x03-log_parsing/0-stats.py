@@ -8,7 +8,8 @@ def do_print(size, codes):
     """ print the parsed log """
     print("File size: {}".format(size))
     for code, count in codes.items():
-        print("{}: {}".format(code, count))
+        if count > 0:
+            print("{}: {}".format(code, count))
 
 
 # initialize states
