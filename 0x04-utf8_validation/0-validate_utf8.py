@@ -9,8 +9,7 @@ def validUTF8(data: List) -> bool:
 
     for byte in data:
         byte = bin(byte)[2:].zfill(8)  # convert to binary, 8 bits
-
-        if following_bytes == '0':
+        if following_bytes == 0:
             if byte[0] == '0':
                 continue
             elif byte.startswith('110'):
@@ -19,7 +18,7 @@ def validUTF8(data: List) -> bool:
                 following_bytes = 2
             elif byte.startswith('11110'):
                 following_bytes = 3
-            else:
+            elif binary.startswith('10'):
                 return False
         else:
             if not byte.startswith('10'):
