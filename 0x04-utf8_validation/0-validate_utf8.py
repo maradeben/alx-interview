@@ -5,23 +5,44 @@ from typing import List
 
 def validUTF8(data: List) -> bool:
     """ validate the data, return True or False """
-    following_bytes = 0
+    def is_continuation(byte):
+        """
+        is it a continuation?
+        Args:
+            byte (byte)
+        Returns:
+            returns a bool
+        """
+        return (byte & 0b11000000) == 0b10000000
+
+    def get_bytes_to_follow(start_byte):
+        """
+        Get the bytes to follow
+        Args:
+            start_byte (byte): Where to start
+        Returns:
+            returns an int
+        """
+        if (start_byte & 0b10000000) == 0b00000000:
+            return 0
+        elif (start_byte & 0b11100000) == 0b11000000:
+            return 1
+        elif (start_byte & 0b11110000) == 0b11100000:
+            return 2
+        elif (start_byte & 0b11111000) == 0b11110000:
+            return 3
+        return -1
+    bytes_to_follow = 0
 
     for byte in data:
-        byte = bin(byte)[2:].zfill(8)  # convert to binary, 8 bits
-        if following_bytes == 0:
-            if byte[0] == '0':
+        if bytes_to_follow == 0:
+            bytes_to_follow = get_bytes_to_follow(byte)
+            if bytes_to_follow == -1:
+                return False
+            elif bytes_to_follow == 0:
                 continue
-            elif byte.startswith('110'):
-                following_bytes = 1
-            elif byte.startswith('1110'):
-                following_bytes = 2
-            elif byte.startswith('11110'):
-                following_bytes = 3
-            elif binary.startswith('10'):
-                return False
         else:
-            if not byte.startswith('10'):
+            if not is_continuation(byte):
                 return False
-            following_bytes = -1
-    return following_bytes == 0
+            bytes_to_follow -= 1
+    return bytes_to_follow == 0
