@@ -6,23 +6,11 @@ from typing import List
 def validUTF8(data: List) -> bool:
     """ validate the data, return True or False """
     def is_continuation(byte):
-        """
-        is it a continuation?
-        Args:
-            byte (byte)
-        Returns:
-            returns a bool
-        """
+        """ is it a continuation? """
         return (byte & 0b11000000) == 0b10000000
 
     def get_bytes_to_follow(start_byte):
-        """
-        Get the bytes to follow
-        Args:
-            start_byte (byte): Where to start
-        Returns:
-            returns an int
-        """
+        """ Get the bytes to follow """
         if (start_byte & 0b10000000) == 0b00000000:
             return 0
         elif (start_byte & 0b11100000) == 0b11000000:
