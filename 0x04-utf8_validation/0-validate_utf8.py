@@ -5,36 +5,24 @@ from typing import List
 
 def validUTF8(data: List) -> bool:
     """ validate the data, return True or False """
-    # check if first byte is valid
-    first_byte = data[0]
-    if first_byte < 0 or first_byte > 255:
-        return False
+    following_bytes = 0
 
-    # track continuation bytes
-    expected_continuation_bytes = 0
-
-    # looop over each byte
     for byte in data:
-        # check valid continuation byte
-        if expected_continuation_bytes > 0:
-            if byte < 128 or byte > 191:
-                return False
-            expected_continuation_bytes -= 1
-        # check valid new character byte start
-        else:
-            if byte < 128:
+        byte = bin(byte)[2:].zfill(8)  # convert to binary, 8 bits
+
+        if following_bytes == '0':
+            if byte[0] == '0':
                 continue
-            elif byte < 192:
-                expected_continuation_bytes = 1
-            elif byte < 224:
-                expected_continuation_bytes = 2
-            elif byte < 240:
-                expected_continuation_bytes = 3
+            elif byte.startswith('110'):
+                following_bytes = 1
+            elif byte.startswith('1110'):
+                following_bytes = 2
+            elif byte.startswith('11110'):
+                following_bytes = 3
             else:
-                # Invalid start byte.
                 return False
-
-    if expected_continuation_bytes > 0:
-        return False
-
-    return True
+        else:
+            if not byte.startswith('10'):
+                return False
+            following_bytes = -1
+    return following_bytes == 0
