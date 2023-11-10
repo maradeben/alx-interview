@@ -1,24 +1,28 @@
-const fetch = require('node-fetch');
+#!/usr/bin/node
+const request = require('request');
 
-// Get the movie ID from the first positional argument
-const movieId = process.argv[1];
+const url = 'https://swapi-api.hbtn.io/api/films/' + process.argv[2];
 
-// Make a request to the Star Wars API to get the movie data
-async function fetchStarWarsMovieData(movieId) {
-  const response = await fetch(`https://swapi.dev/api/films/${movieId}`);
-  const movieData = await response.json();
-  return movieData;
-}
-
-// Print each character name on a new line
-async function printStarWarsCharacterNames(movieId) {
-  const movieData = await fetchStarWarsMovieData(movieId);
-  const characters = movieData.characters;
-
-  for (const character of characters) {
-    console.log(character);
+request(url, (err, res, body) => {
+  if (err) {
+    console.log(err);
   }
-}
-
-// Call the printStarWarsCharacterNames function with the movie ID
-printStarWarsCharacterNames(movieId);
+  const characters = JSON.parse(body).characters;
+  const promises = characters.map((character) => {
+    return new Promise((resolve, reject) => {
+      request(character, (err, res, body) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(JSON.parse(body).name);
+      });
+    });
+  }
+  );
+  Promise.all(promises).then((names) => {
+    names.forEach((name) => {
+      console.log(name);
+    });
+  }
+  );
+});
