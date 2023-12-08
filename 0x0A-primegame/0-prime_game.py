@@ -21,7 +21,7 @@ def modify_set(num, num_set):
     """ modify the set, remove num and multiples """
     new_set = []
     for x in num_set:
-        if x == num or x % num == 0:
+        if x % num == 0:
             continue
         else:
             new_set.append(x)
@@ -51,6 +51,9 @@ def isWinner(x, nums):
     """ entry point of the program """
     maria = 0
     ben = 0
+
+    if (x < 1):
+        return None
 
     for i in range(x):
         winner = playgame([j for j in range(1, nums[i]+1)])
