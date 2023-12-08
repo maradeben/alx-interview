@@ -8,6 +8,8 @@ def check_prime(num):
         return False
     elif num == 2:
         return True
+    elif num % 2 == 0:
+        return False
     else:
         for i in range(3, int(num/2)):
             if num % i == 0:
@@ -34,6 +36,7 @@ def playgame(num_set):
     turns = 0
 
     for num in num_set:
+        print(num, num_set, 'player', turns%2)
         if check_prime(num):
             num_set = modify_set(num, num_set)
             # increment player
